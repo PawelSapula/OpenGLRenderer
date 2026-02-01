@@ -1,0 +1,1 @@
+Heres all the essential and important concepts about graphics programming especially for OpenGL followed in this tutorial https://learnopengl.com/
