@@ -4,6 +4,8 @@
 #include <iostream>
 #include <cmath>
 
+#include "menu.h"
+
 void processInput(GLFWwindow* window);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 unsigned int initShader();
@@ -51,6 +53,8 @@ int main() {
 		return -1;
 	}
 
+	Menu::init(window);
+
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback); // Register callback function to scale with the window.
 
 	unsigned int shaderProgram = initShader(); // Shader assembly and initialization
@@ -82,6 +86,8 @@ int main() {
 
 	while (!glfwWindowShouldClose(window)) { //Render loop
 
+		glfwPollEvents(); //Keyboard presses, window changes
+		Menu::frameSetup();
 
 		/////////////////// TEST
 
@@ -123,10 +129,11 @@ int main() {
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3); //Draws after primitive choice, starting index and final count.
 
-		glfwPollEvents(); //Keyboard presses, window changes
+		Menu::render();
 		glfwSwapBuffers(window); // Frame swap
 	}
 
+	Menu::shutdown();
 	glfwTerminate();
 	return 0;
 

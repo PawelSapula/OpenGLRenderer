@@ -393,6 +393,3 @@ Thumbs.db
 
 #System specific
 Libs/
-OpenGLRenderer.sln
-OpenGLRenderer.vcxproj
-OpenGLRenderer.vcxproj.filters
