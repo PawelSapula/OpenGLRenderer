@@ -85,7 +85,7 @@ int main() {
 
 		/////////////////// TEST
 
-		double angle = glfwGetTime();
+		double angle = glfwGetTime() * 100;
 
 		float identity[] = {
 			1.0f, 0.0f, 0.0f, 0.0f,
