@@ -2,10 +2,11 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <cmath>
 
 void processInput(GLFWwindow* window);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void initShader();
+unsigned int initShader();
 
 const unsigned int W_WIDTH = 800;
 const unsigned int W_HEIGHT = 600;
@@ -13,16 +14,17 @@ const unsigned int W_HEIGHT = 600;
 const float vertices[] = { // Triangle, even so z coordinate is depth. (NDC)
 	-0.5f, -0.5f, 0.0f,
 	 0.5f, -0.5f, 0.0f,
-	 0.0f, 0.5f, -0.5f
+	 0.0f, 0.5f + 0.1667, 0.0f
 };
 
-const char* vertexShaderSource = "#version 330 core\n"
+const char* vertexShaderSource = "#version 460 core\n"
 "layout (location = 0) in vec3 aPos;\n"
+"uniform mat4 matrix;\n"
 "void main() {\n"
-"	gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"	gl_Position = matrix * vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
 "}\0";
 
-const char* fragmentShaderSource = "#version 330 core\n"
+const char* fragmentShaderSource = "#version 460 core\n"
 "out vec4 FragColor;\n"
 "void main() {\n"
 "		FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
@@ -31,8 +33,8 @@ const char* fragmentShaderSource = "#version 330 core\n"
 int main() {
 
 	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // 4
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3); // 6
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4); // 4
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6); // 6
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	GLFWwindow* window = glfwCreateWindow(W_WIDTH, W_HEIGHT, "OpenGLRenderer", NULL, NULL);
@@ -51,7 +53,7 @@ int main() {
 
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback); // Register callback function to scale with the window.
 
-	initShader(); // Shader assembly and initialization
+	unsigned int shaderProgram = initShader(); // Shader assembly and initialization
 
 
 
@@ -74,14 +76,45 @@ int main() {
 	// 6. Weird cast, but offset of where relevant data begins in the buffer.
 
 	glEnableVertexAttribArray(0); // Enable the destination in shader to really accept data. Disabled normally.
-	// Unbinds VAO automatically.
+	// Unbinds VAO automatically. But line under for precation.
 
-
+	glBindVertexArray(0); // Unbind VAO
 
 	while (!glfwWindowShouldClose(window)) { //Render loop
 
-		processInput(window);
 
+		/////////////////// TEST
+
+		double angle = glfwGetTime();
+
+		float identity[] = {
+			1.0f, 0.0f, 0.0f, 0.0f,
+			0.0f, 1.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 1.0f, 0.0f,
+			0.0f, 0.0f, 0.0f, 1.0f
+		};
+
+		float rotateY3d[] = {
+			cos(angle),	 0.0f,	sin(angle),		0.0f,
+			0.0f,		 1.0f,	0.0f,			0.0f,
+			-sin(angle), 0.0f,	cos(angle),		0.0f,
+
+			0.0f,		 0.0f,	0.0f,			1.0f
+		};
+
+		float rotateY2d[] = {
+			cos(angle),	 -sin(angle),   0,				0.0f,
+			sin(angle),	 cos(angle)	,	0.0f,			0.0f,
+			0,			 0.0f,			1,				0.0f,
+
+			0.0f,		 0.0f,			0.0f,			1.0f
+		};
+
+		glProgramUniformMatrix4fv(shaderProgram, glGetUniformLocation(shaderProgram, "matrix"), 1, GL_FALSE, rotateY3d);
+
+		///////////////////////
+
+		processInput(window);
 
 		glClearColor(0.1f, 0.3f, 0.3f, 1.0f); // Configuration for glClear
 		glClear(GL_COLOR_BUFFER_BIT); // Clear color buffer to ensure that previous frame results dont linger.
@@ -99,7 +132,7 @@ int main() {
 
 }
 
-void initShader() {
+unsigned int initShader() {
 	unsigned int vertexShader;
 	vertexShader = glCreateShader(GL_VERTEX_SHADER); // Create a shader object referenced by an id
 	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -121,6 +154,7 @@ void initShader() {
 	glDeleteShader(vertexShader); // Unnecessary objects. Can delete.
 	glDeleteShader(fragmentShader);
 
+	return shaderProgram;
 }
 
 void processInput(GLFWwindow* window) {

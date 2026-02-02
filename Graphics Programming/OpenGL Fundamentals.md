@@ -1,3 +1,5 @@
+Refer to [[OpenGL Coding Principles]] and [[Tools]] for more practical documentation (skipping most theory) .
+
 - Developed usually by the graphic card manufacturers for different versions
 - Ported to Linux etc. by community
 - **Core-profile** is the indepth OpenGL. **Immediate Mode** allowed simple drawing but is now depreacated.
