@@ -69,12 +69,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Tools.md",
+                "file": "OpenGL Fundamentals.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Tools"
+              "title": "OpenGL Fundamentals"
             }
           },
           {
@@ -116,10 +116,14 @@
             "id": "3aab96df03eca3b8",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "type": "markdown",
+              "state": {
+                "file": "GLSL.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "GLSL"
             }
           }
         ]
@@ -286,6 +290,7 @@
   },
   "active": "25bbe14f22b0b28a",
   "lastOpenFiles": [
+    "GLSL.md",
     "OpenGL Fundamentals.md",
     "Graphics Programming.md",
     "OpenGL Coding Principles.md",

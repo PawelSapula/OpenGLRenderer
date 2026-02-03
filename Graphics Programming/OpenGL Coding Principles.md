@@ -14,4 +14,6 @@
 Definitions:
 - VBO (Vertex Buffer Object): Specialized object to store and effectively send CPU vertex data to the GPU. This allows us also to manage where on the GPU it should be stored (long term, static, dynamical and changing etc.). Specifies also which data gets send to which input on the shaders.
 
- - VAO (Vertex Array Object): Allows us to create configurations for VBO (the different attributes). It automatically unbinds when enabling destined attribute, but for precaution sake, we can unbind it with glBindVertexArray(0);
+ - VAO (Vertex Array Object): Allows us to create configurations for VBO and EBO (the different attributes). Automatically links EBO and VBO together. It automatically unbinds when enabling destined attribute, but for precaution sake, we can unbind it with glBindVertexArray(0);
+
++ EBO (Element buffer objects): A buffer just like a VBO that stores the indices (multiple of indexes) that OpenGL uses to decide what vertices to draw. This lets us create rectangles for example with just 4 vertices instead of 6. 
