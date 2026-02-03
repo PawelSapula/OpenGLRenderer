@@ -16,7 +16,7 @@ const unsigned int W_HEIGHT = 600;
 const float vertices[] = { // Triangle, even so z coordinate is depth. (NDC)
 	-0.5f, -0.5f, 0.0f,
 	 0.5f, -0.5f, 0.0f,
-	 0.0f, 0.5f + 0.1667, 0.0f
+	 0.0f, 0.5f, 0.0f
 };
 
 const char* vertexShaderSource = "#version 460 core\n"
@@ -28,8 +28,9 @@ const char* vertexShaderSource = "#version 460 core\n"
 
 const char* fragmentShaderSource = "#version 460 core\n"
 "out vec4 FragColor;\n"
+"uniform float color[4];\n"
 "void main() {\n"
-"		FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+"		FragColor = vec4(color[0], color[1], color[2], color[3]);\n"
 "}\0";
 
 int main() {
@@ -116,7 +117,18 @@ int main() {
 			0.0f,		 0.0f,			0.0f,			1.0f
 		};
 
-		glProgramUniformMatrix4fv(shaderProgram, glGetUniformLocation(shaderProgram, "matrix"), 1, GL_FALSE, rotateY3d);
+		if (Menu::rotationY) {
+			Menu::MVPMatrix.M[0] = rotateY3d[0];
+			Menu::MVPMatrix.M[2] = rotateY3d[2];
+			Menu::MVPMatrix.M[5] = rotateY3d[5];
+			Menu::MVPMatrix.M[8] = rotateY3d[8];
+			Menu::MVPMatrix.M[10] = rotateY3d[10];
+			Menu::MVPMatrix.M[15] = rotateY3d[15];
+		}
+
+		glProgramUniformMatrix4fv(shaderProgram, glGetUniformLocation(shaderProgram, "matrix"), 1, GL_FALSE, Menu::MVPMatrix.M);
+		glProgramUniform1fv(shaderProgram, glGetUniformLocation(shaderProgram, "color"), 3, Menu::color);
+		//Uniform types fv - float, vector
 
 		///////////////////////
 
