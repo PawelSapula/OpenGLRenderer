@@ -1,10 +1,13 @@
 #pragma once
 #include <GLFW/glfw3.h>
 
+
 struct MVP {
 	float M[16];
 	float V[16];
 	float P[16];
+
+	MVP(); // Constructor for initializing the matrices as identity matrices.
 };
 
 namespace Menu {

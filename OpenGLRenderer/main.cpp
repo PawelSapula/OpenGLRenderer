@@ -14,13 +14,13 @@ const unsigned int W_WIDTH = 800;
 const unsigned int W_HEIGHT = 600;
 
 const float vertices[] = {
-	-0.5f, -0.5f, 0.0f,
-	-0.5f, 0.5f, 0.0f,  
-	 0.5f, -0.5f, 0.0f,
-	 0.5f, 0.5f, 0.0f
+	-0.5f, -0.5f, 0.0f,			0.0f, 0.0f,
+	-0.5f, 0.5f, 0.0f,			0.0f, 1.0f,
+	 0.5f, -0.5f, 0.0f,			1.0f, 0.0f,
+	 0.5f, 0.5f, 0.0f,			1.0f, 1.0f
 };
 
-unsigned int indices[] = {
+const unsigned int indices[] = {
 	0, 1, 2,
 	1, 2, 3
 };
@@ -53,7 +53,41 @@ int main() {
 	Shader shader("vertexShader.glsl", "fragmentShader.glsl");
 	shader.use();
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // Wireframe mode.
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // Wireframe mode.
+	stbi_set_flip_vertically_on_load(true);
+
+	unsigned int texture;
+	glGenTextures(1, &texture); // Takes in how many textures we want to create and stores it in a unsigned int array. (our case 1 unsigned int)
+	glBindTexture(GL_TEXTURE_2D, texture); // Binding texture to set properties
+
+	// Sets the wrapping mode for our texture. arg1: texture type, arg2: which axis, arg3: wrapping mode.
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// Setting the texture filtering attributes.
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	int width, height, nrChannels; // Color channels
+	unsigned char* data = stbi_load("resources/gojo_sukuna.jpg", &width, &height, &nrChannels, 0);
+	if (data) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		// 1: Target
+		// 2: Default mipmap level. Full image -> 0
+		// 3: Desired texture format
+		// 4, 5: width and height
+		// 6: Legacy stuff, always 0
+		// 7: Source image format -> loaded with RGB values
+		// 8: Datatype of picture (loaded as chars, (bytes))
+		// 9. Actual image data
+
+		glGenerateMipmap(GL_TEXTURE_2D); // Generate Mipmaps :D
+	}
+	else {
+		std::cout << "Failed to load texture." << std::endl;
+	}
+
+	stbi_image_free(data); // Free image from memory
+
 
 	unsigned int VBO; // Vertex buffer objects, can store a large number of vertices since its slow to constantly send data from CPU to GPU
 	unsigned int VAO; // Required, Vertex Array Object to more effectively manage configurations (vertex, binding w shaders)
@@ -71,7 +105,7 @@ int main() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); // Bind EBO with the element array buffer.
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW); // Store our indices
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0); //Coordinates
 	// 1. Which attribute (location = ?) in shader we want to configure.
 	// 2. Size of the vertex attribute. Its vec3 so its composed of 3 values. (keep in mind our float array is 9)
 	// 3. Specifies the type of data we send.
@@ -79,7 +113,10 @@ int main() {
 	// 5. Stride, the space or size between consecusive vertex attributes. Can be 0 when tightly packed (same array objects).
 	// 6. Weird cast, but offset of where relevant data begins in the buffer.
 
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3*sizeof(float))); //Texture coords
+
 	glEnableVertexAttribArray(0); // Enable the destination in shader to really accept data. Disabled normally.
+	glEnableVertexAttribArray(1);
 	// Unbinds VAO automatically. But line under for precation.
 
 	glBindVertexArray(0); // Unbind VAO
@@ -92,13 +129,6 @@ int main() {
 		/////////////////// TEST
 
 		double angle = glfwGetTime();
-
-		float identity[] = {
-			1.0f, 0.0f, 0.0f, 0.0f,
-			0.0f, 1.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f, 0.0f,
-			0.0f, 0.0f, 0.0f, 1.0f
-		};
 
 		float rotateY3d[] = {
 			cos(angle),	 0.0f,	sin(angle),		0.0f,
@@ -132,10 +162,11 @@ int main() {
 
 		processInput(window);
 
-		glClearColor(0.1f, 0.3f, 0.3f, 1.0f); // Configuration for glClear
+		glClearColor(0.2f, 0.2f, 0.2f, 1.0f); // Configuration for glClear
 		glClear(GL_COLOR_BUFFER_BIT); // Clear color buffer to ensure that previous frame results dont linger.
 
 		//glUseProgram(shaderProgram) Already enabled
+		//glBindTexture(GL_TEXTURE_2D, texture); Already enabled
 		glBindVertexArray(VAO);
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0); // arg 2: 6 indices -> 6 vertices in total, arg 3: type, arg 4: offset in EBO

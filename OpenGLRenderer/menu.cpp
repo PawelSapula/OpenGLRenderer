@@ -7,6 +7,19 @@
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "imgui/backends/imgui_impl_opengl3.h"
 
+MVP::MVP() {
+	int iteration = 0;
+	for (int row = 0; row < 4; row++) {
+		for (int column = 0; column < 4; column++) {
+			float val = row == column ? 1.0f : 0.0f;
+			M[iteration] = val;
+			V[iteration] = val;
+			P[iteration] = val;
+			iteration++;
+		}
+	}
+}
+
 void Menu::init(GLFWwindow* window) {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
