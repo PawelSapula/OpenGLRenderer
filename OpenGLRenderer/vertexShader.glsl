@@ -1,4 +1,4 @@
-#version 460 core 
+#version 460 core
 //Corresponds to OpenGL version 460 -> 4.6
 
 layout (location = 0) in vec3 aPos;	
@@ -12,4 +12,3 @@ void main() {
 	//gl_Position, a predefined buffer to contain the output
 
 }
-//test CRLF
