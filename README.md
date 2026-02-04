@@ -15,4 +15,7 @@ With high interest in computer graphics and low-level programming,i decided to d
 
  > [!TIP]
 > Linux users have to often install the GNU C++ Compiler, CMake, GLFW, OpenGL on their own. This can be done for Debian/Ubuntu systems with `sudo apt get`.
-> <br><br> For ImGUI compilation for both systems. For VS, add the .cpp files to the Project Source and simply build the solution. For CMake as your build manager, simply Edit `CMakeLists.txt` and add include directories pointing to the `OpenGLRenderer\imgui` and put all the .cpp files asa executables. 
+> <br><br> For ImGUI compilation for both systems. For VS, add the .cpp files to the Project Source and simply build the solution. For CMake as your build manager, simply Edit `CMakeLists.txt` and add include directories pointing to the `OpenGLRenderer\imgui` and put all the .cpp files asa executables.
+
+> [!WARNING]
+> Running as a CMake Application changes normally working directory to the ´cmake-build-xxx´ folder. Remember to set this attribute (recommended) or provide full directories for the shader.
