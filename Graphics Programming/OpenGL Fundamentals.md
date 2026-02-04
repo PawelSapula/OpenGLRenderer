@@ -1,3 +1,5 @@
+Refer to [[OpenGL Coding Principles]] and [[Tools]] for more practical documentation (skipping most theory) .
+
 - Developed usually by the graphic card manufacturers for different versions
 - Ported to Linux etc. by community
 - **Core-profile** is the indepth OpenGL. **Immediate Mode** allowed simple drawing but is now depreacated.
@@ -28,7 +30,7 @@
 		- Small programs that can be run in parallell and specify in a singular, small task.
 		- Have input and output for the pipeline.
 		- Shaders are divided onto the cores of the GPU. Spares CPU of enormous computing.
-		- Written in GLSL (OpenGL Shading Language)
+		- Written in GLSL (OpenGL Shading Language), Its a C-like language. More about [[GLSL]].
 		- Gives the developer much more control over specific parts of the pipeline.
 
 	 - Stages of the graphics pipeline:

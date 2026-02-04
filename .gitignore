@@ -361,3 +361,35 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Build folders
+cmake-build-*/
+build/
+out/
+
+# CLion
+.idea/
+
+# Visual Studio
+.vs/
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+CMakeSettings.json
+
+# Compiled binaries
+*.exe
+*.dll
+*.lib
+*.so
+*.a
+*.o
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+
+#System specific
+Libs/
