@@ -1,9 +1,12 @@
 #include "gl.h"
 
 #include <iostream>
+
 #include <cmath>
+#include <numbers>
 
 #include "shader.h"
+#include "linalg.h"
 #include "menu.h"
 
 void processInput(GLFWwindow* window);
@@ -54,7 +57,7 @@ int main() {
 	shader.use();
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // Wireframe mode.
-	stbi_set_flip_vertically_on_load(true);
+	stbi_set_flip_vertically_on_load(true); // Flip to normal position. Happens because texture coords LeftBottom - (0,0) while pictures are normally LeftTop (0,0)
 
 	unsigned int texture;
 	glGenTextures(1, &texture); // Takes in how many textures we want to create and stores it in a unsigned int array. (our case 1 unsigned int)
@@ -130,32 +133,45 @@ int main() {
 
 		double angle = glfwGetTime();
 
-		float rotateY3d[] = {
-			cos(angle),	 0.0f,	sin(angle),		0.0f,
-			0.0f,		 1.0f,	0.0f,			0.0f,
-			-sin(angle), 0.0f,	cos(angle),		0.0f,
+		//float*  perspective = Menu::MVPMatrix.perspective(45 * (std::numbers::pi_v<float> / 180), 800.0f / 600.0f, 0.1f, 100.0f);
+		//MVP::setMatrix(Menu::MVPMatrix.P, perspective, 16);
 
-			0.0f,		 0.0f,	0.0f,			1.0f
-		};
+		/* // Not sigma way of doing things, dont let me implement it (Matrix.cpp btw)
+		glm::mat4 model =		glm::mat4(1.0f);
+		glm::mat4 view =		glm::mat4(1.0f);
+		glm::mat4 projection =	glm::mat4(1.0f);
 
-		float rotateY2d[] = {
-			cos(angle),	 -sin(angle),   0,				0.0f,
-			sin(angle),	 cos(angle)	,	0.0f,			0.0f,
-			0,			 0.0f,			1,				0.0f,
+		model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		projection = glm::perspective(glm::radians(45.f), (float)width / (float)height, 0.1f, 100.0f);
 
-			0.0f,		 0.0f,			0.0f,			1.0f
-		};
+		LinAlg::setMatrix(Menu::MVPMatrix.M, glm::value_ptr(model), 16); // Debug
+		LinAlg::setMatrix(Menu::MVPMatrix.V, glm::value_ptr(view), 16);
+		LinAlg::setMatrix(Menu::MVPMatrix.P, glm::value_ptr(projection), 16);
 
-		if (Menu::rotationY) {
-			Menu::MVPMatrix.M[0] = rotateY3d[0];
-			Menu::MVPMatrix.M[2] = rotateY3d[2];
-			Menu::MVPMatrix.M[5] = rotateY3d[5];
-			Menu::MVPMatrix.M[8] = rotateY3d[8];
-			Menu::MVPMatrix.M[10] = rotateY3d[10];
-			Menu::MVPMatrix.M[15] = rotateY3d[15];
-		}
+		shader.setUniform(MATRIX4FV, "M", glm::value_ptr(model));
+		shader.setUniform(MATRIX4FV, "V", glm::value_ptr(view));
+		shader.setUniform(MATRIX4FV, "P", glm::value_ptr(projection));
+		
+		*/
 
-		shader.setUniform(MATRIX4FV, "matrix", Menu::MVPMatrix.M);
+		
+		Matrix4 model(1.0f);
+		Matrix4 view(1.0f);
+		Matrix4 projection;
+
+		model = LinAlg::rotate(model, glm::radians(angle*35), Vec3(1.0f, 1.0f, 0.0f));
+		view = LinAlg::translate(view, Vec3(0.0f, 0.0f, -1.8f));
+		projection = LinAlg::perspective(glm::radians(45.f), (float)width / (float)height, 0.1f, 100.0f);
+
+		LinAlg::setMatrix(Menu::MVPMatrix.M, model.matrix, 16);
+		LinAlg::setMatrix(Menu::MVPMatrix.V, view.matrix, 16);
+		LinAlg::setMatrix(Menu::MVPMatrix.P, projection.matrix, 16);
+
+		shader.setUniform(MATRIX4FV, "M", model.matrix);
+		shader.setUniform(MATRIX4FV, "V", view.matrix);
+		shader.setUniform(MATRIX4FV, "P", projection.matrix);
+		
 		shader.setUniform(F1V3, "color", Menu::color);
 
 		///////////////////////

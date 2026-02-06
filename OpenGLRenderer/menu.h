@@ -2,6 +2,8 @@
 #include <GLFW/glfw3.h>
 
 
+//TODO: Alternative for MVP since everything got ported into linalg.h/.cpp
+
 struct MVP {
 	float M[16];
 	float V[16];

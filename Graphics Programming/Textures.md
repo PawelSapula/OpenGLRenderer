@@ -36,11 +36,18 @@ A `texture` is (most often) a 2D image used to add detail to an object. Think of
 
 How to make a picture a texture? Parse it to your program.  Recommended to use stb-image, Sean Barrett, https://github.com/nothings/stb/, a library for parsing the most picture types.
 
-**Texture unit**: The memory location of a texture. The main purpouse of these are to allow us to use multiple textures at the same time in an fragment shader. Calling `glActiveTexture(GL_TEXTURE'0-15')` (atleast 16) enables us to activate the different texture units.
+**Texture unit**: The memory location of a texture. The main purpouse of these are to allow us to use multiple textures at the same time in an fragment shader. Calling `glActiveTexture(GL_TEXTURE'0-15')` (atleast 16) enables us to activate the different texture units, then assign a texture by binding it.
 
-`IMPORTANT!` Two samplers are still needed to get two textures, just that they have asigned numeric values asigned to the texture unit. You can't lighten the process of initialization. The only thing that happens is that even when calling `glBindTexture`, it wont override our first texture but put hold it in the unit.
+Heres the connections between the points.
 
-1. Activate a texture unit
-2. Bind texture
+- **Texture objects** → many, persistent, just data.
+    
+- **Texture units** → few, temporary binding slots
+    
+- **Samplers** → just integers pointing at units
+
+1. Activate a texture unit.
+2. Bind (assign) the texture to the selected (activated) texture unit.
+3. Samplers are set with the integer of the texture units.
 
 The default texture unit for a texture is 0, which OpenGL automatically enables.  Not all graphics drivers do this unfortunately.
