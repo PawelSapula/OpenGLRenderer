@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstddef>
+
 struct Vec3 {
 	float x, y, z;
 
@@ -38,7 +40,7 @@ struct Matrix4 {
 
 struct LinAlg {
 public:
-	static float* val_ptr(Matrix4 m);
+	static float* val_ptr(Matrix4& m); //Linux: SIGSEGV 139 when not reference variable
 	static Matrix4 add(Matrix4 m1, Matrix4 m2);
 	static Matrix4 scalar(Matrix4 m, float scalar);
 	static Matrix4 transpose(Matrix4 m);
@@ -47,5 +49,5 @@ public:
 	static Matrix4 rotate(Matrix4 m, float angle, Vec3 rotationAxis);
 	static Matrix4 perspective(float fov, float aspect, float near, float far);
 	static Matrix4 lookAt(Vec3 camPos, Vec3 target, Vec3 up);
-	static void setMatrix2D1D(float* destination, float* matrix, size_t byteCount);
+	static void setMatrix2D1D(float* destination, float* matrix, std::size_t byteCount);
 };

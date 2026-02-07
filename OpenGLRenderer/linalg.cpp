@@ -102,11 +102,11 @@ Matrix4 LinAlg::translate(Matrix4 m, Vec3 translate) {
 	return m;
 }
 
-void LinAlg::setMatrix2D1D(float* destination, float* matrix, size_t byteCount) {
+void LinAlg::setMatrix2D1D(float* destination, float* matrix, std::size_t byteCount) {
 	std::memcpy(destination, matrix, byteCount);
 }
 
-float* LinAlg::val_ptr(Matrix4 m) {
+float* LinAlg::val_ptr(Matrix4& m) {
 	m = LinAlg::transpose(m); // Turn to column major
 	return &m.matrix[0][0];
 }
