@@ -105,9 +105,11 @@ To **define** a camera we needs its position in world space, the direction it's 
 
 - **Camera direction** is the vector corresponding to what direction we are pointing at.  This can be obtained by getting the difference (with different words, subtracting) our camera position vector and for example the origin of our scene (world). By intuition we would write that as `direction = target - cameraPos`.  With keeping in mind that the camera looks down the negative z-axis, we want to negate this direction to point backwards of us, for the sake of convenient calculations. Therefore, we would define the direction as following `direction = cameraPos - target`.  (It becomes a vector pointing from target to cameraPos)
 
-* The **right axis** represents the positive x-axis of the camera space. This is obtained by getting the cross product of the up-axis (in world space) with the cameras direction. (Opposite cross product $cameraDirection \times up$ we would get a vector that points in the negative x-axis).
+* The **right axis** (of camera) represents the positive x-axis of the camera space. This is obtained by getting the cross product of the up-axis (in world space) with the cameras direction. (Opposite cross product $cameraDirection \times up$ we would get a vector that points in the negative x-axis).
 
-- **Up axis** (of the camera) can be simply optained by taking the cross product of the right and direction vector.
+- **Up axis** (of the camera) can be simply optained by taking the cross product of the direction vector and right vector.
+
+![](Pasted%20image%2020260207170543.png)
 
 Using these camera vectors we can now create a `LookAt` matrix that proves useful for creating a camera. 
 
@@ -165,5 +167,6 @@ Since everything in the world-space is positioned in the direction of the negati
 Continuing on, GLFW has a mouse callback for cursor position. Here we have to:
 1. Calculate the mouse's offset since the last frame.
 2. Add the offset values to the camera's yaw and pitch values.
-3. Add some constraints to the minimum/maximum pitch values. LookAt matrix flip when (` camera direction == world up vector`)
+3. Add some constraints to the minimum/maximum pitch values. LookAt matrix flip when (` camera direction == world up vector (-89f, 89f)`)
 4. Calculate the direction vector.
+5. Set camera front to normalized direction vector.
