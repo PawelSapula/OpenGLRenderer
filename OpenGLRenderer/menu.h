@@ -14,7 +14,7 @@ struct MVP {
 
 namespace Menu {
 
-	inline float color[3]; // Inline for header file initialization, so compiler knows that this is the owner between multiple source files (check for better definition)
+	inline float color[3] = {1,1,1}; // Inline for header file initialization, so compiler knows that this is the owner between multiple source files (check for better definition)
 	inline MVP MVPMatrix;
 	inline bool rotationY = false;
 

@@ -1,12 +1,16 @@
 `Important!` Read this page top bottom when it all is a part of a large picture instead of different subjects and themes.
 
+How a camera system is made and how it can be simulated can be seen here [Camera](#Camera).
+
 
 
 Matrices can be used for linear transformations which works amazingly with vertices.
 
 OpenGL expects all the vertices that want to become **visisble** ti be in normalized device coordinates (NDC) after each vertex shader run.
 
-NDC: (Normalized Device Coorodinates), Coordinates between **-1.0** and **1.0** on a normal cartesian coordinate system. OpenGL requires visible vertices to be in this range to display them on the x,y and z axes.
+NDC: (Normalized Device Coorodinates), Coordinates between **-1.0** and **1.0** on a normal cartesian coordinate system. OpenGL requires visible vertices to be in this range to display them, this applies for all the x,y and z axes.
+
+**Important!** NDC coordinates contains the z-component as we already know. This matters because of the OpenGLs inbuilt depth buffer (Z-buffer). This is a measure in which layer of the screen the object displays its vertices, not in the regular world-coordinate z-axis. 
 
 
 
@@ -88,3 +92,78 @@ As earlier mentioned, because of specifying the visible coordinates to be within
 - How orthographic and projection matrices are really calculated: https://www.songho.ca/opengl/gl_projectionmatrix.html
 
 `glm::perspective(FoV, aspect (width/height or constant), near, far)`; or manual (see source over).
+
+
+
+# Camera
+
+OpenGL by itself is not familiar with the concept of a camera, but we can try to simulate one by moving all objects in the scene in the reverse direction, giving the ilusion that we are moving.
+
+To **define** a camera we needs its position in world space, the direction it's looking at and vectors pointing right and upwards from the camera. This will correspond to a coordinate systrem with 3 perpendicular (right angle ) unit axes with the camera's position as the origin. This is also known as the `Gram-Schmidt` process in linear algebra.
+
+-  Setting the **camera position** is the same as defining a vector in $R^3$. Remember that the camera is stearing down the negative z-axis, so to move it backwards we would define the position as for example `vec3(0.0f, 0.0f, 3.0f)`.
+
+- **Camera direction** is the vector corresponding to what direction we are pointing at.  This can be obtained by getting the difference (with different words, subtracting) our camera position vector and for example the origin of our scene (world). By intuition we would write that as `direction = target - cameraPos`.  With keeping in mind that the camera looks down the negative z-axis, we want to negate this direction to point backwards of us, for the sake of convenient calculations. Therefore, we would define the direction as following `direction = cameraPos - target`.  (It becomes a vector pointing from target to cameraPos)
+
+* The **right axis** represents the positive x-axis of the camera space. This is obtained by getting the cross product of the up-axis (in world space) with the cameras direction. (Opposite cross product $cameraDirection \times up$ we would get a vector that points in the negative x-axis).
+
+- **Up axis** (of the camera) can be simply optained by taking the cross product of the right and direction vector.
+
+Using these camera vectors we can now create a `LookAt` matrix that proves useful for creating a camera. 
+
+**LookAt matrix** (a view matrix that looks at a given target)
+- Using LookAt matrix as our view matrix effectively transforms the world in the opposite direction of where we want the camera to move.
+- When we have defined a coordinate space using 3 perpendicular axes we can now create a matrix suitable for camera operations.
+- We can set up the vectors in a 4x4 with a translation vector and we can transform any vector to that coordinate space by multiplying it with this matrix. 
+$$ LookAt = \begin{bmatrix} \color{red}{R_x} & \color{red}{R_y} & \color{red}{R_z} & 0 \\ \color{green}{U_x} & \color{green}{U_y} & \color{green}{U_z} & 0 \\ \color{blue}{D_x} & \color{blue}{D_y} & \color{blue}{D_z} & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix} * \begin{bmatrix} 1 & 0 & 0 & -\color{purple}{P_x} \\ 0 & 1 & 0 & -\color{purple}{P_y} \\ 0 & 0 & 1 & -\color{purple}{P_z} \\ 0 & 0 & 0 & 1 \end{bmatrix} $$
+R = right  vector, U = up vector,     D = direction vector,     P = camera's position vector
+
+**Note**: These matrices are inverted (transposed (rotation) and negated (translation)). This is to effectively transform the world in the opposite direction of where we want the camera to move. Keep in mind that **the transponded rotation matrix is the same as the inverse of that matrix**. This is why we also had to find direction in reverse to assure that all of our movement becomes reverse transformed to world coordinates (This applies also for example for the x and y coordinates where the camera movement is theoretically opposite to the world).
+
+# Camera - In practice
+
+For **walk around** movement we specify world space coordinates for our camera, target (often z = -1, meaning in front) and camera up. These are vector variables that we can control with using inputs and simple operations with scalars and `deltaTime` but also cross products for left and right and the predefined camera up.
+
+
+
+**Look around** is as expected dependent on the direction the camera is looking - meaning some trigonometry will be necessary to describe this.
+
+**Euler angles** - 3 values that can represent any rotation in 3D, by **Leonhart Euler**. There are 3 Euler angles, `pitch, yaw and roll`. Each angle is represented by a single value and with the combination of all 3 of them we can calculate any rotation vector in 3D.
+
+- **Pitch**: The angle that depicts how much we're looking up or down.
+- **Yaw**: The magnitude we're looking to the left or to the right.
+- **<del>Roll</del>**: How much we roll/twist (mostly used in space-flight cameras).
+
+**Theory**:
+Imagine right triangles with $hypotenuse = 1$. We can formulate some expressions:
+- $sin(yaw) = y/h = y/1 = y = sin(yaw)$
+- $cos(yaw) = x/h = x/1 = x = cos(yaw)$
+
+This triangle can be imagined looking down the y-axis with the adjacent and opposite sides being parallell to the scene's x and z-axis.
+
+If we visualize the yaw angle to be counter-clockwise angle from the x-axis, we can create two distinct relations:
+- $x = cos(yaw)$
+-  $z = sin(yaw)$
+
+The  `pitch` angle can be obtained in a similar manner. Imagine now a triangle vertically from the x-z-plane. This creates new relations:
+- $y = sin(pitch)$
+- $x/z-plane = cos(pitch)$
+
+Since x and z also are dependent on the pitch value, the total formulation for the pitch and yaw angle will be:
+$$
+yaw = \theta, pitch = \omega
+$$ $$
+\begin{bmatrix}
+	cos(\theta) * cos(\omega) \\
+	sin(\omega) \\
+		sin(\theta) * cos(\omega)
+\end{bmatrix}
+$$
+
+
+Since everything in the world-space is positioned in the direction of the negative z-axis, we will set the value of `yaw = -90.0f`.
+Continuing on, GLFW has a mouse callback for cursor position. Here we have to:
+1. Calculate the mouse's offset since the last frame.
+2. Add the offset values to the camera's yaw and pitch values.
+3. Add some constraints to the minimum/maximum pitch values. LookAt matrix flip when (` camera direction == world up vector`)
+4. Calculate the direction vector.

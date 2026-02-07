@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Textures.md",
+                "file": "Learning from failure.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Textures"
+              "title": "Learning from failure"
             }
           },
           {
@@ -35,8 +35,7 @@
               "title": "Learning from failure"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -197,21 +196,21 @@
       "bases:Create new base": false
     }
   },
-  "active": "fed7af1fd0588390",
+  "active": "eea6e3d18d133afb",
   "lastOpenFiles": [
-    "images",
-    "images/Pasted image 20260206011556.png",
-    "Tools.md",
-    "Learning from failure.md",
     "Camera & Coordinate Systems.md",
     "Textures.md",
+    "OpenGL Fundamentals.md",
+    "Learning from failure.md",
+    "OpenGL Coding Principles.md",
+    "Tools.md",
+    "GLSL.md",
+    "Graphics Programming.md",
+    "images",
+    "images/Pasted image 20260206011556.png",
     "Pasted image 20260205171536.png",
     "images/transformation_pipeline.png",
-    "GLSL.md",
-    "OpenGL Fundamentals.md",
-    "OpenGL Coding Principles.md",
     "GLSL..md",
-    "Graphics Programming.md",
     "Fragment Interpolation(GLSL..md).md",
     "Untitled.canvas"
   ]
