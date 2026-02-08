@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Learning from failure.md",
+                "file": "Camera & Coordinate Systems.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Learning from failure"
+              "title": "Camera & Coordinate Systems"
             }
           }
         ],
@@ -197,12 +197,12 @@
       "bases:Create new base": false
     }
   },
-  "active": "6313790ab7e1c6e9",
+  "active": "fed7af1fd0588390",
   "lastOpenFiles": [
-    "Pasted image 20260207170949.png",
+    "Learning from failure.md",
+    "images/Pasted image 20260207170949.png",
     "Camera & Coordinate Systems.md",
     "images/Pasted image 20260207170543.png",
-    "Learning from failure.md",
     "Textures.md",
     "OpenGL Fundamentals.md",
     "OpenGL Coding Principles.md",
