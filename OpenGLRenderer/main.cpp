@@ -8,17 +8,12 @@
 #include "shader.h"
 #include "linalg.h"
 #include "menu.h"
+#include "camera.h"
 
 void processInput(GLFWwindow* window);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-
-float fov = 45.0f;
-float lastX = 400, lastY = 300; // Middle of the screen at 800x600
-float yaw = -90.0f;
-float pitch = 0.0f;
-bool firstMouse = true;
 
 const unsigned int W_WIDTH = 800;
 const unsigned int W_HEIGHT = 600;
@@ -92,24 +87,7 @@ const unsigned int indices[] = {
 	1, 2, 3
 };
 
-struct Camera {
-	Vec3 pos;
-	Vec3 front;
-	Vec3 up;
-
-	Camera() = default;
-	Camera(Vec3 pos, Vec3 cameraFront, Vec3 cameraUp);
-};
-
-Camera::Camera(Vec3 pos, Vec3 front, Vec3 up) {
-	this->pos = pos;
-	this->front = front;
-	this->up = up;
-}
-
-Camera camera(Vec3(0.0f, 0.0f, 3.0f),
-	Vec3(0.0f, 0.0f, -1.0f),  // Target in front of camera. Target is defined in world space coordinates.
-	Vec3(0.0f, 1.0f, 0.0f));
+Camera camera(Vec3(0.0f, 0.0f, 3.0f), Vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f);
 
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
@@ -218,23 +196,15 @@ int main() {
 
 		Menu::frameSetup();
 
-		/////////////////// TEST
 
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 		
-		Matrix4 view;
+		Matrix4 view = camera.GetViewMatrix();
 		Matrix4 projection;
 
-		//model = LinAlg::rotate(model, glm::radians(0.0f), Vec3(1.0f, 1.0f, 0.0f));
-	
-		projection = LinAlg::perspective(glm::radians(fov), (float)width / (float)height, 0.1f, 100.0f);
-		view = LinAlg::lookAt(
-			camera.pos,
-			Vec3::add(camera.pos, camera.front), // The camera keeps looking in forwards. The target is in front of us and moves with the position.
-			camera.up
-		);
+		projection = LinAlg::perspective(glm::radians(camera.FOV), (float)W_WIDTH / (float)W_HEIGHT, 0.1f, 100.0f);
 
 		LinAlg::setMatrix2D1D(Menu::MVPMatrix.V, &view.matrix[0][0], sizeof(Menu::MVPMatrix.M));
 		LinAlg::setMatrix2D1D(Menu::MVPMatrix.P, &projection.matrix[0][0], sizeof(Menu::MVPMatrix.P));
@@ -244,9 +214,7 @@ int main() {
 		
 		shader.setUniform(F1V3, "color", Menu::color);
 
-		std::cout << std::to_string(camera.pos.x) << " " << std::to_string(camera.pos.y) << " " << std::to_string(camera.pos.z) << std::endl;
 
-		///////////////////////
 
 		processInput(window);
 
@@ -287,33 +255,20 @@ void processInput(GLFWwindow* window) {
 		glfwSetWindowShouldClose(window, true);
 	}
 
-	const float cameraSpeed = 2.0f*deltaTime;
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-		camera.pos = Vec3::add(camera.pos, Vec3::scalar(camera.front, cameraSpeed)); // Go forward in z axis -> camera object - z
-	}
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-		camera.pos = Vec3::subtract(camera.pos, Vec3::scalar(camera.front, cameraSpeed));  // Go back in z axis -> camera object + z
-	}
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-		camera.pos = Vec3::subtract(camera.pos, Vec3::scalar(Vec3::normalize(Vec3::cross(camera.front, camera.up)), cameraSpeed)); // Go negative x -> world right
-	}
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-		camera.pos = Vec3::add(camera.pos, Vec3::scalar(Vec3::normalize(Vec3::cross(camera.front, camera.up)), cameraSpeed)); // Go positive x -> world left
-	}
-	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-		camera.pos = Vec3::add(camera.pos, Vec3::scalar(camera.up, cameraSpeed)); // normal
-	}
-	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-		camera.pos = Vec3::subtract(camera.pos, Vec3::scalar(camera.up, cameraSpeed)); // normal
-	}
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) camera.ProcessKeyboard(FORWARD, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) camera.ProcessKeyboard(BACKWARD, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) camera.ProcessKeyboard(LEFT, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) camera.ProcessKeyboard(RIGHT, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) camera.ProcessKeyboard(UP, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) camera.ProcessKeyboard(DOWN, deltaTime);
 
 }
 
+float lastX = W_WIDTH/2, lastY = W_HEIGHT/2; // Middle of the screen at 800x600
+bool firstMouse = true;
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
-	fov -= (float)yoffset;
-	if (fov < 1.0f) fov = 1.0f;
-	if (fov > 60.0f) fov = 60.0f;
+	camera.processScroll(yoffset);
 }
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
@@ -329,22 +284,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 	lastX = xpos;
 	lastY = ypos;
 
-	float sensitivity = 0.1f; // Sensitivity variable to scale with, 
-	xoffset *= sensitivity;
-	yoffset *= sensitivity;
-
-	yaw += xoffset; // Add sensitivity offset. Can directly add because proportional to screen up-down, left-right.
-	pitch += yoffset;
-
-	//Limit the viewing angles because of a weird flip in LookAt when camDir = worldUp.
-	if (pitch > 89.0f) pitch = 89.0f;
-	if (pitch < -89.0f) pitch = -89.0f;
-
-	Vec3 direction;
-	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-	direction.y = sin(glm::radians(pitch));
-	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-	camera.front = Vec3::normalize(direction);
+	camera.ProcessMouse(xoffset, yoffset);
 
 }
 
