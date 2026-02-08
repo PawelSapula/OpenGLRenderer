@@ -5,9 +5,9 @@
 
 3. Eventual window callbacks to sync with OpenGL
 
-4. Shader creation (for the necessary ones), compilation  and program creation. Remember to call glUseProgram(shaderID) before use!
+4. Shader creation (for the necessary ones), compilation  and program creation. Remember to call glUseProgram(shaderID) before use! More about shaders [GLSL](GLSL.md).
 
-5. Creation of the VAO's and VBO's for sooner use.
+5. Creation of the VAO's, VBO's and eventually EBO's for sooner use.
 
 6. Main loop with input processing, callback handeling, drawing and swapping frame.
 

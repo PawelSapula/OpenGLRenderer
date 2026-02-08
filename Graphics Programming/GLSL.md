@@ -39,3 +39,6 @@ Variable Types
 <code>vec2 someVec; <br>
 vec4 differentVec = someVec.xyxx;
 </code> 
+
+Fragment interpolation: Blending of colors. When we have for example different colors on our vertices, after the rasaterization process, our pixel will blend the colors depending on their location from the "original" color vertices.
+

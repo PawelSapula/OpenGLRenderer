@@ -8,125 +8,35 @@
         "type": "tabs",
         "children": [
           {
-            "id": "32751e54ba75a389",
+            "id": "eea6e3d18d133afb",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "OpenGL Fundamentals.md",
+                "file": "Camera & Coordinate Systems.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "OpenGL Fundamentals"
+              "title": "Camera & Coordinate Systems"
             }
           },
           {
-            "id": "1acd3dab26834e19",
+            "id": "6313790ab7e1c6e9",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "OpenGL Fundamentals.md",
+                "file": "Camera & Coordinate Systems.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "OpenGL Fundamentals"
-            }
-          },
-          {
-            "id": "86f45ac002629395",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "OpenGL Fundamentals.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "OpenGL Fundamentals"
-            }
-          },
-          {
-            "id": "655d45b64fe12b28",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "OpenGL Fundamentals.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "OpenGL Fundamentals"
-            }
-          },
-          {
-            "id": "25bbe14f22b0b28a",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "OpenGL Fundamentals.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "OpenGL Fundamentals"
-            }
-          },
-          {
-            "id": "557d69923c3ec6ea",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "OpenGL Fundamentals.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "OpenGL Fundamentals"
-            }
-          },
-          {
-            "id": "9fae4ea9574c3161",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Tools.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Tools"
+              "title": "Camera & Coordinate Systems"
             }
           }
         ],
-        "currentTab": 4
-      },
-      {
-        "id": "465326ecb3dd7f55",
-        "type": "tabs",
-        "children": [
-          {
-            "id": "3aab96df03eca3b8",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "GLSL.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "GLSL"
-            }
-          }
-        ]
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -199,7 +109,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "OpenGL Fundamentals.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -209,7 +118,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for OpenGL Fundamentals"
+              "title": "Backlinks"
             }
           },
           {
@@ -279,22 +188,33 @@
   },
   "left-ribbon": {
     "hiddenItems": {
+      "graph:Open graph view": false,
       "switcher:Open quick switcher": false,
       "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
-      "bases:Create new base": false,
-      "graph:Open graph view": false
+      "bases:Create new base": false
     }
   },
-  "active": "25bbe14f22b0b28a",
+  "active": "fed7af1fd0588390",
   "lastOpenFiles": [
-    "GLSL.md",
+    "Learning from failure.md",
+    "images/Pasted image 20260207170949.png",
+    "Camera & Coordinate Systems.md",
+    "images/Pasted image 20260207170543.png",
+    "Textures.md",
     "OpenGL Fundamentals.md",
-    "Graphics Programming.md",
     "OpenGL Coding Principles.md",
+    "GLSL.md",
+    "Graphics Programming.md",
     "Tools.md",
+    "images",
+    "images/Pasted image 20260206011556.png",
+    "Pasted image 20260205171536.png",
+    "images/transformation_pipeline.png",
+    "GLSL..md",
+    "Fragment Interpolation(GLSL..md).md",
     "Untitled.canvas"
   ]
 }

@@ -48,7 +48,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath) {
 	glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
 	if (!success) {
 		glGetShaderInfoLog(vertex, 512, NULL, infoLog);
-		std::cout << "Shader compilation failed.\n" << infoLog << std::endl;
+		std::cout << "Vertex shader compilation failed.\n" << infoLog << std::endl;
 	}
 
 	fragment = glCreateShader(GL_FRAGMENT_SHADER);
@@ -58,7 +58,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath) {
 	glGetShaderiv(fragment, GL_COMPILE_STATUS, &success);
 	if (!success) {
 		glGetShaderInfoLog(fragment, 512, NULL, infoLog);
-		std::cout << "Shader compilation failed.\n" << infoLog << std::endl;
+		std::cout << "Fragment shader compilation failed.\n" << infoLog << std::endl;
 	}
 
 	ID = glCreateProgram(); // Creates a program and returns the ID reference
