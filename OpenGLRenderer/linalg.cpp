@@ -164,10 +164,16 @@ Matrix4 LinAlg::perspective(float fov, float aspect, float near, float far) { //
 	return m;
 }
 
-Matrix4 LinAlg::lookAt(Vec3 camPos, Vec3 target, Vec3 up) { // Fuck this shit ive wasted probably like 10 hours now on this shit fuck opengl and its column major crap ass shit and fuck learnopengl and the owner and fuck opengl and mathematics and everything around me.
+Matrix4 LinAlg::lookAt(Vec3 camPos, Vec3 target, Vec3 up) { 
 	Vec3 camDir = Vec3::normalize(Vec3::subtract(camPos, target)); //points target -> camera, opposite
-	Vec3 camRight = Vec3::normalize(Vec3::cross(up, camDir)); // right
-	Vec3 camUp = Vec3::cross(camDir, camRight); // up
+	Vec3 camRight = Vec3::normalize(Vec3::cross(up, camDir)); // left (right * -1)
+	Vec3 camUp = Vec3::cross(camDir, camRight); // down (up * -1) 
+
+	/*
+	
+	Notice how the coordinates are reversed. This is to create the inverse rotation.
+
+	*/
 
 
 	float rot[] = {	// World axes to camera axes
@@ -181,7 +187,7 @@ Matrix4 LinAlg::lookAt(Vec3 camPos, Vec3 target, Vec3 up) { // Fuck this shit iv
 	Matrix4 rotMat;
 	setMatrix2D1D(&rotMat.matrix[0][0], rot, sizeof(Matrix4));
 
-	float translate[] = {	// Opposite of camera position
+	float translate[] = {	// Negative to translate camera as a origin.
 		1, 0, 0, -camPos.x,
 		0, 1, 0, -camPos.y,
 		0, 0, 1, -camPos.z,
