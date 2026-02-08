@@ -166,14 +166,8 @@ Matrix4 LinAlg::perspective(float fov, float aspect, float near, float far) { //
 
 Matrix4 LinAlg::lookAt(Vec3 camPos, Vec3 target, Vec3 up) { 
 	Vec3 camDir = Vec3::normalize(Vec3::subtract(camPos, target)); //points target -> camera, opposite
-	Vec3 camRight = Vec3::normalize(Vec3::cross(up, camDir)); // left (right * -1)
-	Vec3 camUp = Vec3::cross(camDir, camRight); // down (up * -1) 
-
-	/*
-	
-	Notice how the coordinates are reversed. This is to create the inverse rotation.
-
-	*/
+	Vec3 camRight = Vec3::normalize(Vec3::cross(up, camDir)); //right
+	Vec3 camUp = Vec3::cross(camDir, camRight); //up
 
 
 	float rot[] = {	// World axes to camera axes

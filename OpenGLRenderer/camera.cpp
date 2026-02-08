@@ -31,7 +31,7 @@ Matrix4 Camera::GetViewMatrix() {
 
 	return LinAlg::lookAt(
 		this->Position,
-		Vec3::add(this->Position, this->Front), // The camera keeps looking in forwards. The target is in front of us and moves with the position.
+		Vec3::add(this->Position, this->Front),
 		this->Up
 	);
 

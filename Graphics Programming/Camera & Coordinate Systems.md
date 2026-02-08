@@ -118,9 +118,18 @@ Using these camera vectors we can now create a `LookAt` matrix that proves usefu
 - When we have defined a coordinate space using 3 perpendicular axes we can now create a matrix suitable for camera operations.
 - We can set up the vectors in a 4x4 with a translation vector and we can transform any vector to that coordinate space by multiplying it with this matrix. 
 $$ LookAt = \begin{bmatrix} \color{red}{R_x} & \color{red}{R_y} & \color{red}{R_z} & 0 \\ \color{green}{U_x} & \color{green}{U_y} & \color{green}{U_z} & 0 \\ \color{blue}{D_x} & \color{blue}{D_y} & \color{blue}{D_z} & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix} * \begin{bmatrix} 1 & 0 & 0 & -\color{purple}{P_x} \\ 0 & 1 & 0 & -\color{purple}{P_y} \\ 0 & 0 & 1 & -\color{purple}{P_z} \\ 0 & 0 & 0 & 1 \end{bmatrix} $$
-R = right  vector, U = up vector,     D = direction vector,     P = camera's position vector
+R = right  vector, U = up vector,     D /F= direction/forward vector ,     P = camera's position vector
+**Transformations applied right to left!**
 
-**Note**: These matrices are inverted (transposed (rotation) and negated (translation)). This is to effectively transform the world in the opposite direction of where we want the camera to move. Keep in mind that **the transponded rotation matrix is the same as the inverse of that matrix**. This is why we also had to find direction in reverse to assure that all of our movement becomes reverse transformed to world coordinates (This applies also for example for the x and y coordinates where the camera movement is theoretically opposite to the world).
+**Note**: These matrices are inverted (transposed (rotation) and negated (translation) respectively for the rotation and translation). This is to effectively transform the world in the opposite direction of where we want the camera to move. Keep in mind that **the transponding a rotation matrix is the same as the inverse of that matrix**. 
+
+Its really important to understand that the first matrix - the rotation matrix. This matrix is ALREADY transponded (in this formulation), meaning that the rotation will be applied in reverse. It's an inverse version of the `camera transformation`, a matrix that describes the camera in world-space itself. 
+
+Nonetheless since we want the world to translate opposite from where we want to move, the camera position is negated. After the two matrices are multiplied, we get dot products as `-dot(coordinate, camCoordinate)`. (Since the multiplication affects the whole row in the rotation matrix, it becomes an basis axis product). This creates the result of the world getting transformed and the camera becoming an origin.
+
+While working with OpenGL it's important to remember that it reads data as column-major as default.  Note that column-major layout and transponding aren't the same operations! More about this can be found at [Learning from failure](Learning%20from%20failure.md).
+
+Important sources - https://graphicscompendium.com/opengl/18-lookat-matrix, My linalg.cpp
 
 # Camera - In practice
 

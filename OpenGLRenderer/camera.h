@@ -25,8 +25,7 @@ public:
 	//Camera attributes
 
 	/*
-	For your knowledge you should know that these coordinates are world-space coordinates and should not be
-	mixed with LookAt view matrix camera vectors.
+	For your knowledge you should know that these coordinates are in world-space not view space for moving the camera.
 	*/
 
 	Vec3 Position;

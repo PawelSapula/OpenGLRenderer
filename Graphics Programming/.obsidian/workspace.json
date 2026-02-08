@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Tools.md",
+                "file": "Camera & Coordinate Systems.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Tools"
+              "title": "Camera & Coordinate Systems"
             }
           }
         ],
@@ -199,7 +199,9 @@
   },
   "active": "6313790ab7e1c6e9",
   "lastOpenFiles": [
+    "Untitled.md",
     "Camera & Coordinate Systems.md",
+    "Tools.md",
     "Learning from failure.md",
     "images/Pasted image 20260207170949.png",
     "images/Pasted image 20260207170543.png",
@@ -208,7 +210,6 @@
     "OpenGL Coding Principles.md",
     "GLSL.md",
     "Graphics Programming.md",
-    "Tools.md",
     "images",
     "images/Pasted image 20260206011556.png",
     "Pasted image 20260205171536.png",
